@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.20)
-project(stm32f767ZI_cmake_test LANGUAGES C CXX ASM)
+project(Hands-On-RTOS-With-Microcontrollers-Chapter-7 LANGUAGES C CXX ASM)
 
 set(CMAKE_CXX_STANDARD 20 CACHE STRING "")
 set(CMAKE_CXX_STANDARD_REQUIRED yes CACHE BOOL "")
