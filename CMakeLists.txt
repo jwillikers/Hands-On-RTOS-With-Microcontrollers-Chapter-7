@@ -1,13 +1,60 @@
-cmake_minimum_required(VERSION 3.20)
-project(Hands-On-RTOS-With-Microcontrollers-Chapter-7 LANGUAGES C CXX ASM)
+cmake_minimum_required(VERSION 3.20 FATAL_ERROR)
+
+project(
+    Hands-On-RTOS-With-Microcontrollers-Chapter-7
+    VERSION 0.0.1
+    DESCRIPTION
+    "LED-blinking application for Chapter 7 of Hands-On RTOS With Microcontrollers"
+    HOMEPAGE_URL https://github.com/jwillikers/Hands-On-RTOS-With-Microcontrollers-Chapter-7
+    LANGUAGES C CXX
+)
 
 set(CMAKE_CXX_STANDARD 20 CACHE STRING "")
 set(CMAKE_CXX_STANDARD_REQUIRED yes CACHE BOOL "")
 set(CMAKE_CXX_EXTENSIONS no CACHE BOOL "")
 
+set(CMAKE_CXX_VISIBILITY_PRESET hidden)
 set(CMAKE_INCLUDE_CURRENT_DIR yes)
+set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS no)
+set(CMAKE_VISIBILITY_INLINES_HIDDEN 1)
+
+# This is necessary for CMake to detect executables within the Python virtual
+# environment for the project.
+set(Python_FIND_VIRTUALENV
+    STANDARD
+    CACHE STRING "")
 
 include(FetchContent)
+
+FetchContent_Declare(
+    cmake-scripts
+    GIT_REPOSITORY https://github.com/StableCoder/cmake-scripts
+    GIT_TAG 21.01)
+FetchContent_GetProperties(cmake-scripts)
+if(NOT cmake-scripts_POPULATED)
+  FetchContent_Populate(cmake-scripts)
+  list(APPEND CMAKE_MODULE_PATH ${cmake-scripts_SOURCE_DIR})
+endif()
+
+include(sanitizers)
+
+set(FORMAT_CHECK_CMAKE
+    yes
+    CACHE BOOL "")
+FetchContent_Declare(
+    format
+    GIT_REPOSITORY https://github.com/TheLartians/Format.cmake.git
+    GIT_TAG v1.7.1)
+FetchContent_MakeAvailable(format)
+
+set(USE_CCACHE
+    yes
+    CACHE BOOL "")
+FetchContent_Declare(
+    ccache.cmake
+    GIT_REPOSITORY https://github.com/TheLartians/Ccache.cmake.git
+    GIT_TAG v1.2.3)
+FetchContent_MakeAvailable(ccache.cmake)
 
 FetchContent_Declare(
     freertos
