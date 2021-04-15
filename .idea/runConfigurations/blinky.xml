@@ -1,0 +1,10 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="blinky" type="com.jetbrains.cidr.embedded.openocd.conf.type" factoryName="com.jetbrains.cidr.embedded.openocd.conf.factory" nameIsGenerated="true" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="Hands-On-RTOS-With-Microcontrollers-Chapter-7" TARGET_NAME="blinky" CONFIG_NAME="Debug-ARM" version="1" RUN_TARGET_PROJECT_NAME="Hands-On-RTOS-With-Microcontrollers-Chapter-7" RUN_TARGET_NAME="blinky">
+    <openocd version="1" gdb-port="3333" telnet-port="4444" board-config="/usr/local/share/openocd/scripts/board/st_nucleo_f7.cfg" reset-type="INIT" download-type="UPDATED_ONLY">
+      <debugger kind="GDB" isBundled="true" />
+    </openocd>
+    <method v="2">
+      <option name="CLION.COMPOUND.BUILD" enabled="true" />
+    </method>
+  </configuration>
+</component>
