@@ -50,10 +50,10 @@ find_package(HAL COMPONENTS STM32F7 REQUIRED)
 find_package(FreeRTOS COMPONENTS ARM_CM7 REQUIRED)
 find_package(BSP COMPONENTS STM32F7xx_Nucleo_144 REQUIRED)
 
-add_executable(stm32f767ZI_cmake_test)
+add_executable(blinky)
 
 target_sources(
-    stm32f767ZI_cmake_test
+    blinky
     PRIVATE
     main.cpp
     FreeRTOSConfig.h
@@ -70,9 +70,9 @@ target_sources(
     syscalls.c
 )
 
-target_link_libraries(stm32f767ZI_cmake_test
+target_link_libraries(
+    blinky
     PRIVATE
-#    FreeRTOS::Coroutine
     FreeRTOS::EventGroups
     FreeRTOS::StreamBuffer
     FreeRTOS::Timers
@@ -98,5 +98,5 @@ target_link_libraries(stm32f767ZI_cmake_test
     CMSIS::STM32::F767ZI
     BSP::STM32::STM32F7xx_Nucleo_144
     STM32::NoSys
-#    STM32::Nano
+)
 )
