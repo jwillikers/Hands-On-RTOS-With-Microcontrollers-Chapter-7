@@ -99,4 +99,9 @@ target_link_libraries(
     BSP::STM32::STM32F7xx_Nucleo_144
     STM32::NoSys
 )
+
+add_custom_target(
+    flash
+    openocd -f board/st_nucleo_f7.cfg -c \"program $<TARGET_FILE:blinky> verify reset exit\"
+    USES_TERMINAL
 )
