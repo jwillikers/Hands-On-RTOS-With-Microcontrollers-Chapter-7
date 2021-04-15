@@ -18,9 +18,9 @@ FetchContent_Declare(
 
 FetchContent_GetProperties(freertos)
 
-if(NOT freertos_POPULATED)
+if (NOT freertos_POPULATED)
   FetchContent_Populate(freertos)
-endif()
+endif ()
 
 set(FREERTOS_PATH ${freertos_SOURCE_DIR} CACHE PATH "")
 
@@ -31,10 +31,10 @@ FetchContent_Declare(
 
 FetchContent_GetProperties(stm32-cmake)
 
-if(NOT stm32-cmake_POPULATED)
+if (NOT stm32-cmake_POPULATED)
   FetchContent_Populate(stm32-cmake)
   list(APPEND CMAKE_MODULE_PATH ${stm32-cmake_SOURCE_DIR}/cmake)
-endif()
+endif ()
 
 set(CMAKE_TOOLCHAIN_FILE ${stm32-cmake_SOURCE_DIR}/cmake/stm32_gcc.cmake)
 
