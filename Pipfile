@@ -4,9 +4,8 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-cmakelang = "*"
 conan = "*"
-pyyaml = "*"
+cmakelang = {extras = ["yaml"], version = "*"}
 
 [dev-packages]
 
