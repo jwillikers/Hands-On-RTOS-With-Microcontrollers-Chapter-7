@@ -178,4 +178,4 @@ void assert_failed(uint8_t *file, uint32_t line) {
   std::cout << "Oh No!\n";
   assert_param(false);
 }
-#endif /* USE_FULL_ASSERT */
+#endif

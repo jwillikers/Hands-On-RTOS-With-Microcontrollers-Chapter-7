@@ -2,16 +2,14 @@
 
 #include <cstdint>
 
-// Create a typedef defining a simple function pointer
-// to be used for LED's
-typedef void (*GPIOFunc)();
+// Create a typedef defining a simple function pointer to be used for LED's
+using GPIOFunc = void (*)();
 
-// this struct holds function pointers to turn each LED
-// on and off
-typedef struct {
+// This struct holds function pointers to turn each LED on and off
+struct LED {
   const GPIOFunc On;
   const GPIOFunc Off;
-} LED;
+};
 
 uint_fast8_t ReadPushButton();
 

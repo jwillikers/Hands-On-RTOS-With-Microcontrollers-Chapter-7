@@ -1,22 +1,6 @@
 #include <main.hpp>
 #include <stm32f7xx_it.hpp>
 
-/** @addtogroup STM32F7xx_HAL_Examples
- * @{
- */
-
-/** @addtogroup Templates
- * @{
- */
-
-/* Private typedef -----------------------------------------------------------*/
-/* Private define ------------------------------------------------------------*/
-/* Private macro -------------------------------------------------------------*/
-/* Private variables ---------------------------------------------------------*/
-
-/* Private function prototypes -----------------------------------------------*/
-/* Private functions ---------------------------------------------------------*/
-
 /******************************************************************************/
 /*            Cortex-M7 Processor Exceptions Handlers                         */
 /******************************************************************************/
@@ -33,9 +17,9 @@ void NMI_Handler() {}
  * @param  None
  * @retval None
  */
-void HardFault_Handler() {
+[[noreturn]] void HardFault_Handler() {
   /* Go to infinite loop when Hard Fault exception occurs */
-  while (1) {
+  while (true) {
   }
 }
 
@@ -44,9 +28,9 @@ void HardFault_Handler() {
  * @param  None
  * @retval None
  */
-void MemManage_Handler() {
+[[noreturn]] void MemManage_Handler() {
   /* Go to infinite loop when Memory Manage exception occurs */
-  while (1) {
+  while (true) {
   }
 }
 
@@ -55,9 +39,9 @@ void MemManage_Handler() {
  * @param  None
  * @retval None
  */
-void BusFault_Handler() {
+[[noreturn]] void BusFault_Handler() {
   /* Go to infinite loop when Bus Fault exception occurs */
-  while (1) {
+  while (true) {
   }
 }
 
@@ -66,9 +50,9 @@ void BusFault_Handler() {
  * @param  None
  * @retval None
  */
-void UsageFault_Handler() {
+[[noreturn]] void UsageFault_Handler() {
   /* Go to infinite loop when Usage Fault exception occurs */
-  while (1) {
+  while (true) {
   }
 }
 
@@ -77,7 +61,7 @@ void UsageFault_Handler() {
  * @param  None
  * @retval None
  */
-// void SVC_Handler(void)
+// void SVC_Handler()
 //{
 //}
 
@@ -86,7 +70,7 @@ void UsageFault_Handler() {
  * @param  None
  * @retval None
  */
-void DebugMon_Handler(void) {}
+void DebugMon_Handler() {}
 
 /**
  * @brief  This function handles PendSVC exception.
@@ -102,7 +86,7 @@ void DebugMon_Handler(void) {}
  * @param  None
  * @retval None
  */
-void SysTick_Handler(void) { HAL_IncTick(); }
+void SysTick_Handler() { HAL_IncTick(); }
 
 /******************************************************************************/
 /*                 STM32F7xx Peripherals Interrupt Handlers                   */
@@ -116,16 +100,6 @@ void SysTick_Handler(void) { HAL_IncTick(); }
  * @param  None
  * @retval None
  */
-/*void PPP_IRQHandler(void)
+/*void PPP_IRQHandler()
 {
 }*/
-
-/**
- * @}
- */
-
-/**
- * @}
- */
-
-/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

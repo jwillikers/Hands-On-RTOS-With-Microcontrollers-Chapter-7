@@ -1,17 +1,9 @@
 #pragma once
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 void NMI_Handler();
-void HardFault_Handler();
-void MemManage_Handler();
-void BusFault_Handler();
-void UsageFault_Handler();
+[[noreturn]] void HardFault_Handler();
+[[noreturn]] void MemManage_Handler();
+[[noreturn]] void BusFault_Handler();
+[[noreturn]] void UsageFault_Handler();
 void DebugMon_Handler();
 void SysTick_Handler();
-
-#ifdef __cplusplus
-}
-#endif
