@@ -1,5 +1,7 @@
+#include <FreeRTOS.h>
 #include <main.hpp>
 #include <stm32f7xx_it.hpp>
+#include <task.h>
 
 /******************************************************************************/
 /*            Cortex-M7 Processor Exceptions Handlers                         */
@@ -86,7 +88,16 @@ void DebugMon_Handler() {}
  * @param  None
  * @retval None
  */
-void SysTick_Handler() { HAL_IncTick(); }
+void SysTick_Handler() {
+  HAL_IncTick();
+#if (INCLUDE_xTaskGetSchedulerState == 1)
+  if (xTaskGetSchedulerState() != taskSCHEDULER_NOT_STARTED) {
+#endif
+    xPortSysTickHandler();
+#if (INCLUDE_xTaskGetSchedulerState == 1)
+  }
+#endif
+}
 
 /******************************************************************************/
 /*                 STM32F7xx Peripherals Interrupt Handlers                   */

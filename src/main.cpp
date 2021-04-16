@@ -64,7 +64,7 @@ void GreenTask(void *) {
 
 void lookBusy() {
   [[maybe_unused]] volatile uint32_t dontCare{};
-  for (int i{}; i < 50E3; i++) {
+  for (int i{}; i < 125'000; i++) {
     dontCare = i % 4;
   }
 }
