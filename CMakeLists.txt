@@ -6,7 +6,7 @@ project(
     DESCRIPTION
     "LED-blinking application for Chapter 7 of Hands-On RTOS With Microcontrollers"
     HOMEPAGE_URL https://github.com/jwillikers/Hands-On-RTOS-With-Microcontrollers-Chapter-7
-    LANGUAGES C CXX
+    LANGUAGES ASM C CXX
 )
 
 set(CMAKE_CXX_STANDARD 20 CACHE STRING "")
@@ -14,7 +14,6 @@ set(CMAKE_CXX_STANDARD_REQUIRED yes CACHE BOOL "")
 set(CMAKE_CXX_EXTENSIONS no CACHE BOOL "")
 
 set(CMAKE_CXX_VISIBILITY_PRESET hidden)
-set(CMAKE_INCLUDE_CURRENT_DIR yes)
 set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS no)
 set(CMAKE_VISIBILITY_INLINES_HIDDEN 1)
 
@@ -92,6 +91,8 @@ stm32_fetch_cube(F7)
 stm32_fetch_cmsis(F7)
 stm32_fetch_hal(F7)
 
+FetchContent_GetProperties(stm32cubef7)
+
 find_package(CMSIS COMPONENTS STM32F7 REQUIRED)
 find_package(HAL COMPONENTS STM32F7 REQUIRED)
 find_package(FreeRTOS COMPONENTS ARM_CM7 REQUIRED)
@@ -102,19 +103,20 @@ add_executable(blinky)
 target_sources(
     blinky
     PRIVATE
-    main.cpp
-    FreeRTOSConfig.h
-    stm32f7xx_hal_conf.h
-    Nucleo_F767ZI_Init.cpp
-    Nucleo_F767ZI_GPIO.cpp
-    # todo Incorporate directly through the existing STM32CubeF7 repository: Middleware/Third_Party/Source/CMSIS_RTOS_V2
-    cmsis_os2.c
+    ${stm32cubef7_SOURCE_DIR}/Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2/cmsis_os2.c
+    src/stm32f7xx_hal_msp.cpp
+    src/syscalls.cpp
+    src/stm32f7xx_it.cpp
+    src/Nucleo_F767ZI_Init.cpp
+    src/Nucleo_F767ZI_GPIO.cpp
+    src/main.cpp
+)
 
-    # todo Incorporate directly from template project: https://github.com/STMicroelectronics/STM32CubeF7/tree/c7c5ec99c7482ea8bcdbf0a869c930af4547088f/Projects/STM32F767ZI-Nucleo/Templates/Src
-    #   Don't forget to include the corresponding headers like main.h, by the way.
-    stm32f7xx_it.c
-    stm32f7xx_hal_msp.c
-    syscalls.c
+target_include_directories(
+    blinky
+    PRIVATE
+    include
+    ${stm32cubef7_SOURCE_DIR}/Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2
 )
 
 target_link_libraries(

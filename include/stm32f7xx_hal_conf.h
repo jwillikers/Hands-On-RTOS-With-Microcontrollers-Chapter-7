@@ -1,20 +1,4 @@
-/**
-  ******************************************************************************
-  * @file    stm32f7xx_hal_conf_template.h
-  * @brief   HAL configuration template file.
-  *          This file should be copied to the application folder and renamed
-  *          to stm32f7xx_hal_conf.h.
-  ******************************************************************************
-  * @attention
-  *
-  * This software component is licensed by ST under BSD 3-Clause license,
-  * the "License"; You may not use this file except in compliance with the
-  * License. You may obtain a copy of the License at:
-  *                        opensource.org/licenses/BSD-3-Clause
-  *
-  ******************************************************************************
-  */
-
+// Derived from STM32CubeF7/Projects/STM32F767ZI-Nucleo/Templates/Inc/stm32f7xx_hal_conf.h
 #pragma once
 
 #ifdef __cplusplus
