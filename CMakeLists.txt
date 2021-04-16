@@ -116,20 +116,19 @@ add_executable(blinky)
 target_sources(
   blinky
   PRIVATE
-#    ${stm32cubef7_SOURCE_DIR}/Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2/cmsis_os2.c
+    ${stm32cubef7_SOURCE_DIR}/Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2/cmsis_os2.c
     src/stm32f7xx_hal_msp.cpp
     src/syscalls.c
     src/stm32f7xx_it.cpp
     src/Nucleo_F767ZI_Init.cpp
     src/Nucleo_F767ZI_GPIO.cpp
-    src/cmsis_os2.c
     src/main.cpp)
 
 target_include_directories(
   blinky
   PRIVATE
     include
-#    ${stm32cubef7_SOURCE_DIR}/Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2
+    ${stm32cubef7_SOURCE_DIR}/Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2
 )
 
 target_link_libraries(
