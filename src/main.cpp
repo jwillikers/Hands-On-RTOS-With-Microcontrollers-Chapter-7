@@ -125,7 +125,7 @@ void lookBusy() {
 //    *pulTimerTaskStackSize = configTIMER_TASK_STACK_DEPTH;
 //}
 
-void vApplicationTickHook() {}
+//void vApplicationTickHook() {}
 
 int main() {
   HWInit();
