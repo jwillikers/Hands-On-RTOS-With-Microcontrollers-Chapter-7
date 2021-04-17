@@ -34,12 +34,6 @@ set(CMAKE_INCLUDE_CURRENT_DIR yes)
 set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS no)
 set(CMAKE_VISIBILITY_INLINES_HIDDEN 1)
 
-# This is necessary for CMake to detect executables within the Python virtual
-# environment for the project.
-set(Python_FIND_VIRTUALENV
-    STANDARD
-    CACHE STRING "")
-
 include(FetchContent)
 
 FetchContent_Declare(
