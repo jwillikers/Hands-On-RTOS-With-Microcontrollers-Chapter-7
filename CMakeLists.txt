@@ -137,9 +137,9 @@ target_sources(
           src/Nucleo_F767ZI_Init.cpp
           src/Nucleo_F767ZI_GPIO.cpp
           src/cmsis_os2.c
-          src/stm32f7xx_it.c
-          src/stm32f7xx_hal_msp.c
-          src/syscalls.c)
+          src/stm32f7xx_it.cpp
+          src/stm32f7xx_hal_msp.cpp
+          src/syscalls.cpp)
 
 target_include_directories(blinky PRIVATE include)
 
