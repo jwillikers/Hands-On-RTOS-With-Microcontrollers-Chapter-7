@@ -64,7 +64,7 @@
 #include <string.h>
 
 #include "cmsis_compiler.h"
-#include "include/cmsis_os2.h" // ::CMSIS:RTOS2
+#include "cmsis_os2.h" // ::CMSIS:RTOS2
 
 #include "FreeRTOS.h"                   // ARM.FreeRTOS::RTOS:Core
 #include "task.h"                       // ARM.FreeRTOS::RTOS:Core

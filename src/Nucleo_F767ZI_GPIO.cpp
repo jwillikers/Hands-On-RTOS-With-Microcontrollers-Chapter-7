@@ -3,7 +3,7 @@
  * Nucleo-F767ZI
  */
 
-#include <include/Nucleo_F767ZI_GPIO.h>
+#include <Nucleo_F767ZI_GPIO.h>
 #include <stm32f7xx_hal.h>
 
 void GreenOn() { HAL_GPIO_WritePin(GPIOB, GPIO_PIN_0, GPIO_PIN_SET); }
