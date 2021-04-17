@@ -1,0 +1,376 @@
+= Hands-On-RTOS-With-Microcontrollers-Chapter-7
+Jordan Williams <jordan@jwillikers.com>
+:experimental:
+:icons: font
+ifdef::env-github[]
+:tip-caption: :bulb:
+:note-caption: :information_source:
+:important-caption: :heavy_exclamation_mark:
+:caution-caption: :fire:
+:warning-caption: :warning:
+endif::[]
+:OpenOCD: http://openocd.org/[OpenOCD]
+:stm32-cmake: https://github.com/ObKo/stm32-cmake[stm32-cmake]
+
+//image:https://img.shields.io/github/workflow/status/jwillikers/Hands-On-RTOS-With-Microcontrollers-Chapter-7/CMake[GitHub Workflow Status]
+
+LED-blinking application for Chapter 7 of https://www.packtpub.com/product/hands-on-rtos-with-microcontrollers/9781838826734[Hands-On RTOS With Microcontrollers].
+This application is built for the STM32F767ZI Nucleo board.
+As opposed to the source code provided by the book for the STM32CubeIDE, this project utilizes CMake as the build system.
+The {stm32-cmake} project is used to incorporate the necessary source code directly from STMicroelectronic's GitHub repositories and the FreeRTOS GitHub repository.
+
+[NOTE]
+====
+This project also deviates from the book according to the debugging software.
+The Segger hooks are not present and OpenOCD is used instead of the J-Link software.
+====
+
+// todo Add gif of blinking LED's
+//ifdef::env-github[]
+//++++
+//<p align="center">
+//  <img  alt="Cyrillic Encoder Demo" src="screenshots/Cyrillic Encoder Demo.gif?raw=true"/>
+//</p>
+//++++
+//endif::[]
+//
+//ifndef::env-github[]
+//image::screenshots/Cyrillic Encoder Demo.gif[Cyrillic Encoder Demo, align=center]
+//endif::[]
+
+== Getting Started
+
+This section describes how to setup the build environment required to build the project.
+The instructions here are for https://ubuntu.com/[Ubuntu] 20.04.
+
+. Install the necessary system packages.
++
+[source,sh]
+----
+➜ sudo apt -y install binutils ccache gcc-arm-none-eabi gdb-multiarch git ninja-build qt5-default python3 python3-pip
+----
+
+. Install the cmakelang Python package via Pip.
++
+--
+[source,sh]
+----
+➜ python3 -m pip install --user cmakelang[yaml]
+----
+
+[NOTE]
+====
+`~/.local/bin` will need to be on your `PATH`.
+====
+--
+
+. Install a newer version of CMake.
+.. Download the latest version.
+x86_64::
++
+[source,sh]
+----
+➜ wget -LP ~/Downloads/ https://github.com/Kitware/CMake/releases/download/v3.20.1/cmake-3.20.1-Linux-x86_64.sh
+----
+
+aarch64::
++
+[source,sh]
+----
+➜ wget -LP ~/Downloads/ https://github.com/Kitware/CMake/releases/download/v3.20.1/cmake-3.20.1-Linux-aarch64.sh
+----
+
+.. Make the installer executable.
++
+[source,sh]
+----
+➜ chmod +x ~/Downloads/cmake-*.sh
+----
+
+.. Change to the `/usr/local` directory.
++
+[source,sh]
+----
+➜ cd /usr/local
+----
+
+.. Install CMake in `/usr/local`.
++
+[source,sh]
+----
+➜ sudo ~/Downloads/cmake-*.sh
+----
+
+.. Press kbd:[q] to skip reading the license.
+
+.. Enter `y` and press enter to accept the license.
+
+.. Enter `n` and press enter to install to the subdirectories in `/usr/local`.
+
+.. Remove the installer.
++
+[source,sh]
+----
+➜ rm ~/Downloads/cmake-*.sh
+----
+
+=== OpenOCD
+
+{OpenOCD} is used to flash the executable to the STM32F7 MCU as well as debugging.
+
+Ubuntu 20.04 ships with a version of OpenOCD without support for the STM32F7 Nucleo board.
+Installing the latest version of OpenOCD solves the problem.
+The following instructions build the latest source code available for the project on Ubuntu 20.04.
+
+. Download and install the necessary packages.
++
+[source,sh]
+----
+➜ sudo apt -y install gcc libusb-1.0-0-dev libftdi-dev libhidapi-dev libgpiod-dev libcapstone-dev make
+----
+
+. Clone the OpenOCD repository.
++
+[source,sh]
+----
+➜ git clone git://git.code.sf.net/p/openocd/code openocd
+----
+
+. Change in to the OpenOCD directory.
++
+[source,sh]
+----
+➜ cd openocd
+----
+
+. Configure the Autotools project.
++
+[source,sh]
+----
+➜ ./bootstrap
+----
+
+. Configure the Autotools project.
++
+[source,sh]
+----
+➜ ./configure
+----
+
+TIP: To install OpenOCD to `/usr`, configure with the flag `--prefix=/usr`.
+
+. Build OpenOCD.
+
+fish::
++
+[source,sh]
+----
+➜ make -j(nproc)
+----
+
+Bash::
++
+[source,sh]
+----
+➜ make -j$(nproc)
+----
+
+. Install OpenOCD.
++
+[source,sh]
+----
+➜ sudo make install
+----
+
+=== Udev
+
+OpenOCD requires Udev rules to permit access to the Nucleo board.
+The instructions here describe how to do this.
+
+. Plug the STM32F767ZI Nucleo board into a computer using the MicroUSB port opposite the ethernet port.
+
+. Create the necessary Udev rule for the STM32F767ZI Nucleo board in the file `/etc/udev/rules.d/99-openocd.rules`.
++
+--
+./etc/udev/rules.d/99-openocd.rules
+[source,udev]
+----
+# STM32F767ZI Nucleo - ST-LINK/V2.1
+ATTRS{idVendor}=="0438", ATTRS{idProduct}=="374b", MODE:="0666"
+----
+--
+
+. Unplug the STM32F767ZI Nucleo board from the computer.
+
+. Now plug it back in to ensure the new Udev rule is applied to it.
+
+== Build
+
+Required source code is pulled in with CMake using stm32-cmake and FetchContent.
+When using a single configuration generator with CMake, set the appropriate build type when configuring the build.
+Likely, this build type will be either _Debug_ or _Release_, but may also be _MinSizeRel_ in order to produce the smallest executable possible.
+Examples for each build type are provided below.
+The examples also enable several helpful options to improve performance of the build and the resulting binaries.
+These examples assume you are in the top-level directory of the project and using a build directory named `build`.
+
+. First, clone the source code of this repository locally.
++
+[source,sh]
+----
+➜ git clone https://github.com/jwillikers/Hands-On-RTOS-With-Microcontrollers-Chapter-7.git
+----
+
+. Then change into the project directory.
++
+[source,sh]
+----
+➜ cd Hands-On-RTOS-With-Microcontrollers-Chapter-7
+----
+
+. Configure the build using the provided toolchain file.
+
+Debug::
++
+[source,sh]
+----
+➜ cmake \
+  -GNinja \
+  -DCMAKE_TOOLCHAIN_FILE=CMake/Toolchains/arm-none-eabi-gnu.cmake \
+  -DCMAKE_BUILD_TYPE=Debug \
+  -DCMAKE_UNITY_BUILD=yes \
+  -DCMAKE_EXE_LINKER_FLAGS="-fuse-ld=gold" \
+  -DCMAKE_MODULE_LINKER_FLAGS="-fuse-ld=gold" \
+  -DCMAKE_SHARED_LINKER_FLAGS="-fuse-ld=gold" \
+  -DCMAKE_CXX_CLANG_TIDY=/usr/bin/clang-tidy \
+  -DCLANG_FORMAT_PROGRAM=/usr/bin/clang-format \
+  -DUSE_SANITIZER="Address;Undefined" \
+  -DCMAKE_C_FLAGS_DEBUG="-gsplit-dwarf" \
+  -DCMAKE_CXX_FLAGS_DEBUG="-gsplit-dwarf" \
+  -B build -S .
+----
+
+Release::
++
+[source,sh]
+----
+➜ cmake \
+  -GNinja \
+  -DCMAKE_TOOLCHAIN_FILE=CMake/Toolchains/arm-none-eabi-gnu.cmake \
+  -DCMAKE_BUILD_TYPE=Release \
+  -DCMAKE_UNITY_BUILD=yes \
+  -DCMAKE_EXE_LINKER_FLAGS="-fuse-ld=gold" \
+  -DCMAKE_MODULE_LINKER_FLAGS="-fuse-ld=gold" \
+  -DCMAKE_SHARED_LINKER_FLAGS="-fuse-ld=gold" \
+  -DCMAKE_CXX_CLANG_TIDY=/usr/bin/clang-tidy \
+  -DCLANG_FORMAT_PROGRAM=/usr/bin/clang-format \
+  -B build -S .
+----
+
+MinSizeRel::
++
+[source,sh]
+----
+➜ cmake \
+  -GNinja \
+  -DCMAKE_TOOLCHAIN_FILE=CMake/Toolchains/arm-none-eabi-gnu.cmake \
+  -DCMAKE_BUILD_TYPE=MinSizeRel \
+  -DCMAKE_UNITY_BUILD=yes \
+  -DCMAKE_EXE_LINKER_FLAGS="-fuse-ld=gold" \
+  -DCMAKE_MODULE_LINKER_FLAGS="-fuse-ld=gold" \
+  -DCMAKE_SHARED_LINKER_FLAGS="-fuse-ld=gold" \
+  -DCMAKE_CXX_CLANG_TIDY=/usr/bin/clang-tidy \
+  -DCLANG_FORMAT_PROGRAM=/usr/bin/clang-format \
+  -B build -S .
+----
+
+. Build the project with CMake.
++
+--
+[source,sh]
+----
+➜ cmake --build build
+----
+
+[NOTE]
+====
+This will also produce a `build/blinky.bin` binay file and a `build/blinky.hex` hex file.
+====
+--
+
+. To flash the ELF file directly to the STM32F7 Nucleo board with OpenOCD, build the _flash_ target with CMake.
++
+[source,sh]
+----
+➜ cmake --build build --target flash
+----
+
+=== Google Sanitizers
+
+Support for Google Sanitizers is provided by the https://github.com/StableCoder/cmake-scripts[cmake-scripts] project.
+Set the `USE_SANITIZER` CMake variable to an appropriate value as documented https://github.com/StableCoder/cmake-scripts#sanitizer-builds-sanitizerscmake[here].
+
+Use the Address and Undefined Behavior sanitizers like so.
+
+[source,sh]
+----
+➜ cmake -DUSE_SANITIZER=Address;Undefined -B build -S .
+----
+
+== Format
+
+The https://clang.llvm.org/docs/ClangFormat.html[clang-format] and https://cmake-format.readthedocs.io/en/latest/cmake-format.html[cmake-format] tools are used to format the source code files.
+The https://github.com/TheLartians/Format.cmake[Format.cmake] module provides build targets to simplify the use of these tools.
+
+Format the source files by building the CMake target `fix-format`.
+
+[source,sh]
+----
+➜ cmake --build build --target fix-format
+----
+
+== Contributing
+
+Contributions in the form of issues, feedback, and even pull requests are welcome.
+Make sure to adhere to the project's link:CODE_OF_CONDUCT.adoc[Code of Conduct].
+
+== Open Source Software
+
+This project is built on the hard work of countless open source contributors.
+Several of these projects are enumerated below.
+
+* https://asciidoctor.org/[Asciidoctor]
+* https://www.boost.org/[Boost {cpp} Libraries]
+* https://ccache.dev/[ccache]
+* https://github.com/TheLartians/Ccache.cmake[Ccache.cmake]
+* https://clang.llvm.org/[Clang]
+* https://clang.llvm.org/extra/clang-tidy/[Clang-Tidy]
+* https://clang.llvm.org/docs/ClangFormat.html[ClangFormat]
+* https://cmake.org/[CMake]
+* https://cmake-format.readthedocs.io/en/latest/index.html[cmakelang]
+* https://github.com/StableCoder/cmake-scripts[CMake Scripts]
+* https://www.debian.org/[Debian]
+* https://gcc.gnu.org/[GCC]
+* https://git-scm.com/[Git]
+* https://www.linuxfoundation.org/[Linux]
+* https://github.com/TheLartians/ModernCppStarter[ModernCppStarter]
+* https://ninja-build.org/[Ninja]
+* {OpenOCD}
+* https://www.python.org/[Python]
+* https://rouge.jneen.net/[Rouge]
+* https://www.ruby-lang.org/en/[Ruby]
+* {stm32-cmake}
+* https://ubuntu.com/[Ubuntu]
+
+== Code of Conduct
+
+The project's Code of Conduct is available in the link:CODE_OF_CONDUCT.adoc[Code of Conduct] file.
+
+== License
+
+This repository is licensed under the https://www.gnu.org/licenses/gpl-3.0.html[GPLv3], available in the link:LICENSE.adoc[license file].
+
+© 2021 Jordan Williams
+
+== Authors
+
+mailto:{email}[{author}]
