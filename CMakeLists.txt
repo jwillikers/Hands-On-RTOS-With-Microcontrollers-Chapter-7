@@ -143,6 +143,13 @@ target_link_libraries(
     STM32::NoSys
 )
 
+target_link_options(
+    blinky PRIVATE
+    LINKER:-gc-sections
+    LINKER:--print-memory-usage
+    LINKER:-Map=${PROJECT_BINARY_DIR}/${PROJECT_NAME}.map
+)
+
 add_custom_target(
     flash
     openocd -f board/st_nucleo_f7.cfg -c \"program $<TARGET_FILE:blinky> verify reset exit\"
