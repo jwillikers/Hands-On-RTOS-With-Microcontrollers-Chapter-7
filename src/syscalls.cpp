@@ -6,11 +6,8 @@
 #include <sys/stat.h>
 #include <sys/time.h>
 
-extern int errno;
 extern int __io_putchar(int ch) __attribute__((weak));
 extern int __io_getchar(void) __attribute__((weak));
-
-register char *stack_ptr asm("sp");
 
 char *__env[1] = {0};
 char **environ = __env;
@@ -50,27 +47,6 @@ __attribute__((weak)) int _write(int file, char *ptr, int len) {
     __io_putchar(*ptr++);
   }
   return len;
-}
-
-caddr_t _sbrk(int incr) {
-  extern char end asm("end");
-  static char *heap_end;
-  char *prev_heap_end;
-
-  if (heap_end == 0)
-    heap_end = &end;
-
-  prev_heap_end = heap_end;
-  if (heap_end + incr > stack_ptr) {
-    //		write(1, "Heap and stack collision\n", 25);
-    //		abort();
-    errno = ENOMEM;
-    return (caddr_t)-1;
-  }
-
-  heap_end += incr;
-
-  return (caddr_t)prev_heap_end;
 }
 
 int _close(int file) { return -1; }

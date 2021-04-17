@@ -119,6 +119,7 @@ target_sources(
     ${stm32cubef7_SOURCE_DIR}/Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2/cmsis_os2.c
     src/stm32f7xx_hal_msp.cpp
     src/syscalls.cpp
+    src/sysmem.cpp
     src/stm32f7xx_it.cpp
     src/Nucleo_F767ZI_Init.cpp
     src/Nucleo_F767ZI_GPIO.cpp
