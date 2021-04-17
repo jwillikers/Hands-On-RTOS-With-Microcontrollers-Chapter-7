@@ -160,6 +160,13 @@ target_link_libraries(
           BSP::STM32::STM32F7xx_Nucleo_144
           STM32::NoSys)
 
+target_link_options(
+    blinky PRIVATE
+    LINKER:-gc-sections
+    LINKER:--print-memory-usage
+    LINKER:-Map=${PROJECT_BINARY_DIR}/${PROJECT_NAME}.map
+)
+
 add_custom_target(
   flash
   openocd
