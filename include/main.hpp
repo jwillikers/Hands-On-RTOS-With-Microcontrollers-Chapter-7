@@ -29,7 +29,7 @@
 #define LD2_GPIO_Port GPIOB
 #define LD1_GPIO_Port GPIOB
 
-void Error_Handler();
+[[noreturn]] void Error_Handler();
 
 constexpr uint_fast8_t USER_Btn_Pin{GPIO_PIN_13};
 constexpr uint16_t MCO_Pin{GPIO_PIN_0};
