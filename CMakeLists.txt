@@ -1,5 +1,7 @@
 cmake_minimum_required(VERSION 3.20 FATAL_ERROR)
 
+include(FetchContent)
+
 function(build_bin_firmware TARGET_NAME)
   set(BIN_FILE ${PROJECT_BINARY_DIR}/${TARGET_NAME}.bin)
   add_custom_command(
@@ -19,6 +21,20 @@ function(build_hex_firmware TARGET_NAME)
     BYPRODUCTS ${HEX_FILE}
     COMMENT "Building ${HEX_FILE}")
 endfunction()
+
+FetchContent_Declare(
+    stm32-cmake
+    GIT_REPOSITORY https://github.com/ObKo/stm32-cmake.git
+    GIT_TAG master)
+
+FetchContent_GetProperties(stm32-cmake)
+
+if(NOT stm32-cmake_POPULATED)
+  FetchContent_Populate(stm32-cmake)
+  list(APPEND CMAKE_MODULE_PATH ${stm32-cmake_SOURCE_DIR}/cmake)
+endif()
+
+set(CMAKE_TOOLCHAIN_FILE ${stm32-cmake_SOURCE_DIR}/cmake/stm32_gcc.cmake)
 
 project(
   Hands-On-RTOS-With-Microcontrollers-Chapter-7
@@ -42,8 +58,6 @@ set(CMAKE_CXX_EXTENSIONS
 set(CMAKE_CXX_VISIBILITY_PRESET hidden)
 set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS no)
 set(CMAKE_VISIBILITY_INLINES_HIDDEN 1)
-
-include(FetchContent)
 
 FetchContent_Declare(
   cmake-scripts
@@ -76,10 +90,10 @@ FetchContent_Declare(
 FetchContent_MakeAvailable(ccache.cmake)
 
 FetchContent_Declare(
-  freertos
-  GIT_REPOSITORY https://github.com/freertos/freertos.git
-  GIT_TAG 202012.00
-  GIT_SUBMODULES_RECURSE yes)
+    freertos
+    GIT_REPOSITORY https://github.com/freertos/freertos.git
+    GIT_TAG 202012.00
+    GIT_SUBMODULES_RECURSE yes)
 
 FetchContent_GetProperties(freertos)
 
@@ -90,20 +104,6 @@ endif()
 set(FREERTOS_PATH
     ${freertos_SOURCE_DIR}
     CACHE PATH "")
-
-FetchContent_Declare(
-  stm32-cmake
-  GIT_REPOSITORY https://github.com/ObKo/stm32-cmake.git
-  GIT_TAG master)
-
-FetchContent_GetProperties(stm32-cmake)
-
-if(NOT stm32-cmake_POPULATED)
-  FetchContent_Populate(stm32-cmake)
-  list(APPEND CMAKE_MODULE_PATH ${stm32-cmake_SOURCE_DIR}/cmake)
-endif()
-
-set(CMAKE_TOOLCHAIN_FILE ${stm32-cmake_SOURCE_DIR}/cmake/stm32_gcc.cmake)
 
 include(${stm32-cmake_SOURCE_DIR}/cmake/stm32/common.cmake)
 include(${stm32-cmake_SOURCE_DIR}/cmake/stm32/utilities.cmake)

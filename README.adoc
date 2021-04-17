@@ -235,7 +235,6 @@ Debug::
 ----
 ➜ cmake \
   -GNinja \
-  -DCMAKE_TOOLCHAIN_FILE=CMake/Toolchains/arm-none-eabi-gnu.cmake \
   -DCMAKE_BUILD_TYPE=Debug \
   -DCMAKE_UNITY_BUILD=yes \
   -DCMAKE_EXE_LINKER_FLAGS="-fuse-ld=gold" \
@@ -254,7 +253,6 @@ Release::
 ----
 ➜ cmake \
   -GNinja \
-  -DCMAKE_TOOLCHAIN_FILE=CMake/Toolchains/arm-none-eabi-gnu.cmake \
   -DCMAKE_BUILD_TYPE=Release \
   -DCMAKE_UNITY_BUILD=yes \
   -DCMAKE_EXE_LINKER_FLAGS="-fuse-ld=gold" \
@@ -271,7 +269,6 @@ MinSizeRel::
 ----
 ➜ cmake \
   -GNinja \
-  -DCMAKE_TOOLCHAIN_FILE=CMake/Toolchains/arm-none-eabi-gnu.cmake \
   -DCMAKE_BUILD_TYPE=MinSizeRel \
   -DCMAKE_UNITY_BUILD=yes \
   -DCMAKE_EXE_LINKER_FLAGS="-fuse-ld=gold" \
