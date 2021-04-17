@@ -6,7 +6,7 @@ project(
     DESCRIPTION
     "LED-blinking application for Chapter 7 of Hands-On RTOS With Microcontrollers"
     HOMEPAGE_URL https://github.com/jwillikers/Hands-On-RTOS-With-Microcontrollers-Chapter-7
-    LANGUAGES C CXX
+    LANGUAGES ASM C CXX
 )
 
 set(CMAKE_CXX_STANDARD 20 CACHE STRING "")
@@ -107,11 +107,7 @@ target_sources(
     stm32f7xx_hal_conf.h
     Nucleo_F767ZI_Init.cpp
     Nucleo_F767ZI_GPIO.cpp
-    # todo Incorporate directly through the existing STM32CubeF7 repository: Middleware/Third_Party/Source/CMSIS_RTOS_V2
     cmsis_os2.c
-
-    # todo Incorporate directly from template project: https://github.com/STMicroelectronics/STM32CubeF7/tree/c7c5ec99c7482ea8bcdbf0a869c930af4547088f/Projects/STM32F767ZI-Nucleo/Templates/Src
-    #   Don't forget to include the corresponding headers like main.h, by the way.
     stm32f7xx_it.c
     stm32f7xx_hal_msp.c
     syscalls.c
