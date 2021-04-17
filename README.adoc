@@ -243,7 +243,6 @@ Debug::
   -DCMAKE_SHARED_LINKER_FLAGS="-fuse-ld=gold" \
   -DCMAKE_CXX_CLANG_TIDY=/usr/bin/clang-tidy \
   -DCLANG_FORMAT_PROGRAM=/usr/bin/clang-format \
-  -DUSE_SANITIZER="Address;Undefined" \
   -DCMAKE_C_FLAGS_DEBUG="-gsplit-dwarf" \
   -DCMAKE_CXX_FLAGS_DEBUG="-gsplit-dwarf" \
   -B build -S .
@@ -302,18 +301,6 @@ This will also produce a `build/blinky.bin` binay file and a `build/blinky.hex` 
 [source,sh]
 ----
 ➜ cmake --build build --target flash
-----
-
-=== Google Sanitizers
-
-Support for Google Sanitizers is provided by the https://github.com/StableCoder/cmake-scripts[cmake-scripts] project.
-Set the `USE_SANITIZER` CMake variable to an appropriate value as documented https://github.com/StableCoder/cmake-scripts#sanitizer-builds-sanitizerscmake[here].
-
-Use the Address and Undefined Behavior sanitizers like so.
-
-[source,sh]
-----
-➜ cmake -DUSE_SANITIZER=Address;Undefined -B build -S .
 ----
 
 == Format
