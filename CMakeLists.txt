@@ -102,16 +102,16 @@ add_executable(blinky)
 target_sources(
     blinky
     PRIVATE
-    main.cpp
-    FreeRTOSConfig.h
-    stm32f7xx_hal_conf.h
-    Nucleo_F767ZI_Init.cpp
-    Nucleo_F767ZI_GPIO.cpp
-    cmsis_os2.c
-    stm32f7xx_it.c
-    stm32f7xx_hal_msp.c
-    syscalls.c
+    src/main.cpp
+    src/Nucleo_F767ZI_Init.cpp
+    src/Nucleo_F767ZI_GPIO.cpp
+    src/cmsis_os2.c
+    src/stm32f7xx_it.c
+    src/stm32f7xx_hal_msp.c
+    src/syscalls.c
 )
+
+target_include_directories(blinky PRIVATE include)
 
 target_link_libraries(
     blinky

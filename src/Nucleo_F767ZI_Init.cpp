@@ -1,8 +1,8 @@
-#include "Nucleo_F767ZI_Init.h"
+#include "include/Nucleo_F767ZI_Init.h"
+#include "include/main.h"
 #include <iostream>
 #include <stm32f7xx_hal.h>
 #include <stm32f7xx_hal_uart.h>
-#include "main.h"
 
 // declarations for 'private' functions not exposed via header file
 void SystemClock_Config();

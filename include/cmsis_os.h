@@ -1,5 +1,5 @@
 /* --------------------------------------------------------------------------
- * Portions Copyright © 2017 STMicroelectronics International N.V. All rights reserved.
+ * Portions Copyright ï¿½ 2017 STMicroelectronics International N.V. All rights reserved.
  * Portions Copyright (c) 2013-2017 ARM Limited. All rights reserved.
  * --------------------------------------------------------------------------
  *
@@ -181,8 +181,8 @@
 #define os_InRegs
 #endif
 
-#include "cmsis_os2.h"
 #include "FreeRTOS.h"
+#include "include/cmsis_os2.h"
 
 #ifdef  __cplusplus
 extern "C"

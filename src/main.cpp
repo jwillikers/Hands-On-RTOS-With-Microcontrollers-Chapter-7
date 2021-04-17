@@ -1,6 +1,6 @@
 #include <FreeRTOS.h>
-#include <Nucleo_F767ZI_GPIO.h>
-#include <Nucleo_F767ZI_Init.h>
+#include <include/Nucleo_F767ZI_GPIO.h>
+#include <include/Nucleo_F767ZI_Init.h>
 #include <iostream>
 #include <stm32f7xx_hal.h>
 #include <task.h>
