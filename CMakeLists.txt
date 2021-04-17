@@ -1,5 +1,21 @@
 cmake_minimum_required(VERSION 3.20 FATAL_ERROR)
 
+function(build_bin_firmware TARGET_NAME)
+  set(BIN_FILE ${PROJECT_BINARY_DIR}/${TARGET_NAME}.bin)
+  add_custom_command(TARGET ${TARGET_NAME} POST_BUILD
+      COMMAND ${CMAKE_OBJCOPY} -Obinary $<TARGET_FILE:${TARGET_NAME}> ${BIN_FILE}
+      BYPRODUCTS ${BIN_FILE}
+      COMMENT "Building ${BIN_FILE}")
+endfunction()
+
+function(build_hex_firmware TARGET_NAME)
+  set(HEX_FILE ${PROJECT_BINARY_DIR}/${TARGET_NAME}.hex)
+  add_custom_command(TARGET ${TARGET_NAME} POST_BUILD
+      COMMAND ${CMAKE_OBJCOPY} -Oihex $<TARGET_FILE:${TARGET_NAME}> ${HEX_FILE}
+      BYPRODUCTS ${HEX_FILE}
+      COMMENT "Building ${HEX_FILE}")
+endfunction()
+
 project(
     Hands-On-RTOS-With-Microcontrollers-Chapter-7
     VERSION 0.0.1
@@ -149,6 +165,10 @@ target_link_options(
     LINKER:--print-memory-usage
     LINKER:-Map=${PROJECT_BINARY_DIR}/${PROJECT_NAME}.map
 )
+
+build_bin_firmware(blinky)
+
+build_hex_firmware(blinky)
 
 add_custom_target(
     flash
