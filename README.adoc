@@ -47,7 +47,8 @@ The instructions here are for https://ubuntu.com/[Ubuntu] 20.04.
 +
 [source,sh]
 ----
-➜ sudo apt -y install binutils ccache gcc-arm-none-eabi gdb-multiarch git ninja-build qt5-default python3 python3-pip
+➜ sudo apt -y install binutils ccache clang-format gcc-arm-none-eabi gdb-multiarch git ninja-build qt5-default python3 \
+  python3-pip
 ----
 
 . Install the cmakelang Python package via Pip.
@@ -237,13 +238,7 @@ Debug::
   -GNinja \
   -DCMAKE_BUILD_TYPE=Debug \
   -DCMAKE_UNITY_BUILD=yes \
-  -DCMAKE_EXE_LINKER_FLAGS="-fuse-ld=gold" \
-  -DCMAKE_MODULE_LINKER_FLAGS="-fuse-ld=gold" \
-  -DCMAKE_SHARED_LINKER_FLAGS="-fuse-ld=gold" \
-  -DCMAKE_CXX_CLANG_TIDY=/usr/bin/clang-tidy \
   -DCLANG_FORMAT_PROGRAM=/usr/bin/clang-format \
-  -DCMAKE_C_FLAGS_DEBUG="-gsplit-dwarf" \
-  -DCMAKE_CXX_FLAGS_DEBUG="-gsplit-dwarf" \
   -B build -S .
 ----
 
@@ -255,10 +250,6 @@ Release::
   -GNinja \
   -DCMAKE_BUILD_TYPE=Release \
   -DCMAKE_UNITY_BUILD=yes \
-  -DCMAKE_EXE_LINKER_FLAGS="-fuse-ld=gold" \
-  -DCMAKE_MODULE_LINKER_FLAGS="-fuse-ld=gold" \
-  -DCMAKE_SHARED_LINKER_FLAGS="-fuse-ld=gold" \
-  -DCMAKE_CXX_CLANG_TIDY=/usr/bin/clang-tidy \
   -DCLANG_FORMAT_PROGRAM=/usr/bin/clang-format \
   -B build -S .
 ----
@@ -271,10 +262,6 @@ MinSizeRel::
   -GNinja \
   -DCMAKE_BUILD_TYPE=MinSizeRel \
   -DCMAKE_UNITY_BUILD=yes \
-  -DCMAKE_EXE_LINKER_FLAGS="-fuse-ld=gold" \
-  -DCMAKE_MODULE_LINKER_FLAGS="-fuse-ld=gold" \
-  -DCMAKE_SHARED_LINKER_FLAGS="-fuse-ld=gold" \
-  -DCMAKE_CXX_CLANG_TIDY=/usr/bin/clang-tidy \
   -DCLANG_FORMAT_PROGRAM=/usr/bin/clang-format \
   -B build -S .
 ----
