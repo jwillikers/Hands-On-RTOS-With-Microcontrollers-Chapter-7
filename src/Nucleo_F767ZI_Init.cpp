@@ -1,5 +1,5 @@
-#include "Nucleo_F767ZI_Init.h"
-#include "main.h"
+#include "Nucleo_F767ZI_Init.hpp"
+#include "main.hpp"
 #include <iostream>
 #include <stm32f7xx_hal.h>
 #include <stm32f7xx_hal_uart.h>

@@ -19,9 +19,9 @@
 /* USER CODE END Header */
 
 /* Includes ------------------------------------------------------------------*/
-#include "stm32f7xx_it.h"
+#include "stm32f7xx_it.hpp"
 #include "FreeRTOS.h"
-#include "main.h"
+#include "main.hpp"
 #include "task.h"
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
