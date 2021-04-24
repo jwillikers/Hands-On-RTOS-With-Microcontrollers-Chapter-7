@@ -48,13 +48,13 @@
 */
 
 /* Includes */
-#include <errno.h>
-#include <signal.h>
-#include <stdio.h>
-#include <stdlib.h>
+#include <cerrno>
+#include <csignal>
+#include <cstdio>
+#include <cstdlib>
+#include <ctime>
 #include <sys/stat.h>
 #include <sys/time.h>
-#include <time.h>
 //#include <sys/times.h>
 
 /* Variables */
